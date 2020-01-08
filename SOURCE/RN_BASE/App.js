@@ -59,7 +59,7 @@ class App extends Component {
 
 }
 
-let codePushOptions = { checkFrequency: codePush.CheckFrequency.ON_APP_START };
+let codePushOptions = { checkFrequency: codePush.CheckFrequency.MANUAL };
 
 
 

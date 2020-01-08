@@ -1,13 +1,79 @@
 import React, { Component } from 'react'
-import { Text, View, Image, StyleSheet } from 'react-native'
+import {
+    Text,
+    View,
+    Image,
+    StyleSheet,
+    TouchableOpacity,
+    ActivityIndicator
+} from 'react-native'
+import DaiichiHeader from '@component/DaiichiHeader'
 import { styles } from '~/constants/Theme'
 //import R from '@R'
+import axios from 'axios'
+import NavigationUtil from '~/navigation/NavigationUtil'
+import reactotron from 'reactotron-react-native'
+import { requestUserInfo } from '../constants/Api'
 
 export default class UserScreen extends Component {
-    render() {
+
+    state = {
+        isLoading: true,
+        err: false,
+        data: {}
+    }
+
+
+    // componentDidMount() {
+    //     axios.get("http://winds.hopto.org:8521/api/Service/GetUserInfor", {
+    //         headers: {
+    //             token: '65FD62931DE65C0F2F0EC18B28F78456'
+    //         }
+    //     }).then(response => {
+    //         reactotron.log(response.data)
+    //         this.setState({
+    //             isLoading: false,
+    //             data: response.data.data
+    //         })
+    //     }).catch(err => {
+    //         console.log(err)
+    //         this.setState({
+    //             isLoading: false,
+    //             err: err,
+    //         })
+    //     })
+
+    // }
+    componentDidMount() {
+        this._getData()
+    }
+
+    _getData = async () => {
+        try {
+            response = await requestUserInfo()
+            this.setState({
+                isLoading: false,
+                data: response.data
+            })
+        } catch (error) {
+            this.setState({
+                isLoading: false,
+                err: error
+            })
+        }
+    }
+
+    _renderBody() {
+        if (this.state.isLoading)
+            return (<ActivityIndicator />)
+        if (this.state.err)
+            return (<Text>Có lỗi, cui lòng thử lại</Text>)
         return (
             <View
                 style={style.container}>
+                    <DaiichiHeader
+                    title="thông tin tài khoản"/>
+                    
                 <View
                     style={style.user_info_block}>
                     <Image
@@ -32,19 +98,25 @@ export default class UserScreen extends Component {
                                     style.text_ten
                                 }>
                                 Nguyễn Thị Thu Phương
-                            </Text>
+                        </Text>
 
                             <Text
                                 style={
                                     style.text_phude
                                 }>
                                 Đại lý
-                            </Text>
+                        </Text>
 
                         </View>
-                        <Text>
-                            Chỉnh sửa thông tin
-                        </Text>
+                        <TouchableOpacity
+                        onPress = {() =>{
+                            NavigationUtil.navigate('updateUserinfo')
+                        }}>
+                            <Text>
+                                Chỉnh sửa thông tin
+                    </Text>
+                        </TouchableOpacity>
+
                     </View>
 
                 </View>
@@ -93,6 +165,15 @@ export default class UserScreen extends Component {
                     </View>
 
                 </View>
+            </View>)
+    }
+    render() {
+        return (
+            <View
+                style={{
+                    flex: 1
+                }}>
+                {this._renderBody()}
             </View>
         )
     }
@@ -120,8 +201,10 @@ export default class UserScreen extends Component {
     _theEnd(title) {
         return (
             <View
-            style={{flexDirection:'row',
-                    alignItems:'center'}}>
+                style={{
+                    flexDirection: 'row',
+                    alignItems: 'center'
+                }}>
                 <Image style={style.note_image} source={require('../assets/images/ic_note3x.png')} />
                 <Text
                     style={style.text_note}>{title}</Text>

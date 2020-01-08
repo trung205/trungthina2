@@ -64,4 +64,10 @@ export const requestHomeData = (deviceID = "") => {
   );
 };
 
+export const requestUserInfo = (deviceID = "") => {
+  return handleResult(
+    getAxios.get(`api/Service/GetUserInfor`)
+  );
+};
+
 

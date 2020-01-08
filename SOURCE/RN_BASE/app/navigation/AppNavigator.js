@@ -15,6 +15,7 @@ import * as theme from "@theme";
 import {
     Image
 } from "react-native";
+import UpdateUserInfo from '../screens/user/UpdateUserinfo'
 const TabBarComponent = props => <BottomTabBar {...props} />;
 
 const Auth = createStackNavigator({
@@ -42,6 +43,50 @@ const getTabBarIcon = (navigation, focused, tintColor) => {
     );
 };
 
+// const Main = createBottomTabNavigator(
+//     {
+//         [SCREEN_ROUTER.HOME]: {
+//             screen: HomeScreen,
+//             title: R.strings.home,
+//             navigationOptions: {
+//                 tabBarLabel: R.strings.home,
+//             },
+//         },
+//         [SCREEN_ROUTER.USER]: {
+//             screen: UserScreen,
+//             title: R.strings.user,
+//             navigationOptions: {
+//                 tabBarLabel: R.strings.user,
+//             },
+//         },
+//     },
+//     {
+//         defaultNavigationOptions: ({ navigation }) => ({
+//             tabBarIcon: ({ focused, tintColor }) => getTabBarIcon(navigation, focused, tintColor),
+//         }),
+//         tabBarOptions: {
+//             activeBackgroundColor: theme.colors.bottombarBg,
+//             inactiveBackgroundColor: theme.colors.bottombarBg,
+//             inactiveTintColor: theme.colors.inactive,
+//             activeTintColor: theme.colors.active,
+//         },
+//         tabBarComponent: props => {
+//             return (
+//                 <TabBarComponent
+//                     {...props}
+//                     onTabPress={props.onTabPress}
+//                     style={{
+//                         borderTopColor: theme.colors.borderTopColor,
+//                         backgroundColor: theme.colors.primary,
+//                         height: 58,
+//                     }}
+//                 />
+//             );
+//         },
+//         initialRouteName: 'User'
+//     }
+
+// )
 const Main = createBottomTabNavigator(
     {
         [SCREEN_ROUTER.HOME]: {
@@ -51,13 +96,24 @@ const Main = createBottomTabNavigator(
                 tabBarLabel: R.strings.home,
             },
         },
-        [SCREEN_ROUTER.USER]: {
-            screen: UserScreen,
-            title: R.strings.user,
-            navigationOptions: {
-                tabBarLabel: R.strings.user,
+        [SCREEN_ROUTER.USER]: createStackNavigator ({
+            user : {
+                screen: UserScreen,
+                title: R.strings.user,
+                navigationOptions: {
+                    tabBarLabel: R.strings.user,
+                },
             },
+            updateUserInfo : {
+                screen: UpdateUserInfo,
+            }
         },
+        {
+            defaultNavigationOptions: {
+                header: null,
+            },
+        }
+        ),
     },
     {
         defaultNavigationOptions: ({ navigation }) => ({
@@ -86,7 +142,6 @@ const Main = createBottomTabNavigator(
     }
 
 )
-
 
 export default createAppContainer(
     createSwitchNavigator({
